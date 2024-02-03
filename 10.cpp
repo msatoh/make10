@@ -13,16 +13,18 @@ public:
 };
 
 double calculate(int op,double param1, double param2){
-  if(op==0)
+  switch(op){
+  case 0:
     return param1+param2;
-  else if(op==1)
+  case 1:
     return param1-param2;
-  else if(op==2)
+  case 2:
     return param1*param2;
-  else if(op==3)
+  case 3:
     return param1/param2;
-  else
+  default:
     return 0;
+  }
 }
 
 string print_op(int op){
@@ -59,13 +61,10 @@ list<double> pick(list<double> lst,int i){
   return lst;
 }
 
-int main(int argc,char *argv[]){
-  double num1,num2,num3,num4;
-  auto res1=Result();
-  auto res2=Result();
-  auto res3=Result();
+void ans(double w,double x,double y,double z){
   int i,j,k,s,t,u,a,b,c;
-  list<double> li={double(atoi(argv[1])),double(atoi(argv[2])),double(atoi(argv[3])),double(atoi(argv[4]))};
+  double num1,num2,num3,num4;
+  list<double> li={double(w),double(x),double(y),double(z)};
   list<double> li1,li2;
   for(i=0;i<4;i++){
     num1=ref(li,i);
@@ -79,6 +78,9 @@ int main(int argc,char *argv[]){
         for(s=0;s<4;s++){
           for(t=0;t<4;t++){
             for(u=0;u<4;u++){
+              auto res1=Result();
+              auto res2=Result();
+              auto res3=Result();
               for(a=0;a<2;a++){
                 if(s<2){
                   res1.form=poly;
@@ -95,29 +97,36 @@ int main(int argc,char *argv[]){
                     res2.form=poly;
                   }else if(res1.form==poly){
                     res1.str="("+res1.str+")";
+                    res1.form=mono;
                   }
                   if(b==0){
                     res2.val=calculate(t,res1.val,num3);
                     res2.str=res1.str+print_op(t)+to_string((int)num3);
                   }else{
-                    res2.val=calculate(t,num3,res1.val);
-                    res2.str=to_string((int)num3)+print_op(t)+res1.str;
+                    if((t==3&&(s==2||s==3))||(t==1&&(s==0||s==1))){
+                      break;
+                    }else{
+                      res2.val=calculate(t,num3,res1.val);
+                      res2.str=to_string((int)num3)+print_op(t)+res1.str;
+                    }
                   }
                   for(c=0;c<2;c++){
                     if(u>1&&res2.form==poly){
                       res2.str="("+res2.str+")";
+                      res2.form=mono;
                     }
                     if(c==0){
                       res3.val=calculate(u,res2.val,num4);
-                      res3.str=res2.str+print_op(t)+to_string((int)num4);
+                      res3.str=res2.str+print_op(u)+to_string((int)num4);
                     }else{
-                      res3.val=calculate(u,num4,res2.val);
-                      res2.str=to_string((int)num4)+print_op(t)+res2.str;
+                      if((u==3&&(t==2||t==3))||(u==1&&(t==0||t==1))){
+                        break;
+                      }else{
+                        res3.val=calculate(u,num4,res2.val);
+                        res3.str=to_string((int)num4)+print_op(u)+res2.str;
+                      }
                     }
-                  }
-                }
-              }
-              if(res3.val-10==0){
+                    if(res3.val-10==0){
                 /*if(a==0){
                   cout<<num1<<print_op(s)<<num2<<"="<<res1.val<<", ";
                 }
@@ -136,8 +145,11 @@ int main(int argc,char *argv[]){
                 else{
                   cout<<num4<<print_op(u)<<res2.val<<"="<<res3.val<<endl;
                 }*/
-                cout<<res3.str<<"=10"<<endl;
-                return 1;
+                      cout<<res3.str<<"="<<res3.val<<endl;
+                      return;
+                    }
+                  }
+                }
               }
             }
           } 
@@ -146,5 +158,23 @@ int main(int argc,char *argv[]){
     } 
   }
   cout<<"not found."<<endl;
+}
+
+int main(int argc,char *argv[]){
+  int w,x,y,z;
+  //list<double> li={double(atoi(argv[1])),double(atoi(argv[2])),double(atoi(argv[3])),double(atoi(argv[4]))};
+  if(argc==5){
+    ans(double(atoi(argv[1])),double(atoi(argv[2])),double(atoi(argv[3])),double(atoi(argv[4])));
+  }else{
+    for(w=1;w<10;w++){
+      for(x=w+1;x<10;x++){
+        for(y=x+1;y<10;y++){
+          for(z=y+1;z<10;z++){
+            ans(w,x,y,z);
+          }
+        }
+      }
+    }
+  }
   return 0;
 }
