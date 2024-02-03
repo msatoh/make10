@@ -62,7 +62,7 @@ list<double> pick(list<double> lst,int i){
 }
 
 void ans(double w,double x,double y,double z){
-  int i,j,k,s,t,u,a,b,c;
+  int i,j,k,s,t,u,a,b,c,tournament;
   double num1,num2,num3,num4;
   list<double> li={double(w),double(x),double(y),double(z)};
   list<double> li1,li2;
@@ -81,52 +81,129 @@ void ans(double w,double x,double y,double z){
               auto res1=Result();
               auto res2=Result();
               auto res3=Result();
-              for(a=0;a<2;a++){
-                if(s<2){
-                  res1.form=poly;
-                }
-                if(a==0){
-                  res1.val=calculate(s,num1,num2);
-                  res1.str=to_string((int)num1)+print_op(s)+to_string((int)num2);
-                }else{
-                  res1.val=calculate(s,num2,num1);
-                  res1.str=to_string((int)num2)+print_op(s)+to_string((int)num1);
-                }
-                for(b=0;b<2;b++){
-                  if(t<2){
-                    res2.form=poly;
-                  }else if(res1.form==poly){
-                    res1.str="("+res1.str+")";
-                    res1.form=mono;
-                  }
-                  if(b==0){
-                    res2.val=calculate(t,res1.val,num3);
-                    res2.str=res1.str+print_op(t)+to_string((int)num3);
-                  }else{
-                    if((t==3&&(s==2||s==3))||(t==1&&(s==0||s==1))){
-                      break;
-                    }else{
-                      res2.val=calculate(t,num3,res1.val);
-                      res2.str=to_string((int)num3)+print_op(t)+res1.str;
-                    }
-                  }
-                  for(c=0;c<2;c++){
-                    if(u>1&&res2.form==poly){
-                      res2.str="("+res2.str+")";
-                      res2.form=mono;
-                    }
-                    if(c==0){
-                      res3.val=calculate(u,res2.val,num4);
-                      res3.str=res2.str+print_op(u)+to_string((int)num4);
-                    }else{
-                      if((u==3&&(t==2||t==3))||(u==1&&(t==0||t==1))){
-                        break;
+              for(tournament=0;tournament<3;tournament++){
+                switch(tournament){
+                case 0:
+                  if(s<2&&t<2&&u>1){
+                    for(a=0;a<2;a++){
+                      if(a==0){
+                        res1.val=calculate(s,num1,num2);
+                        res1.str="("+to_string((int)num1)+print_op(s)+to_string((int)num2)+")";
                       }else{
-                        res3.val=calculate(u,num4,res2.val);
-                        res3.str=to_string((int)num4)+print_op(u)+res2.str;
+                        res1.val=calculate(s,num2,num1);
+                        res1.str="("+to_string((int)num2)+print_op(s)+to_string((int)num1)+")";
+                      }
+                      for(b=0;b<2;b++){
+                        if(b==0){
+                          res2.val=calculate(t,num3,num4);
+                          res2.str="("+to_string((int)num3)+print_op(t)+to_string((int)num4)+")";
+                        }else{
+                          res2.val=calculate(t,num4,num3);
+                          res2.str="("+to_string((int)num4)+print_op(t)+to_string((int)num3)+")";
+                        }
+                        for(c=0;c<2;c++){
+                          if(c==0){
+                            res3.val=calculate(u,res1.val,res2.val);
+                            res3.str=res1.str+print_op(u)+res2.str;
+                          }else{
+                            res3.val=calculate(u,res2.val,res1.val);
+                            res3.str=res2.str+print_op(u)+res1.str;
+                          }
+                          if(res3.val-10==0){
+                            cout<<res3.str<<"="<<res3.val<<endl;
+                            return;
+                          }
+                        }
                       }
                     }
-                    if(res3.val-10==0){
+                  }else{
+                    break;
+                  }
+                  break;
+                case 1:
+                  if(s>1&&t>1&&u<2){
+                    for(a=0;a<2;a++){
+                      if(a==0){
+                        res1.val=calculate(s,num1,num2);
+                        res1.str=to_string((int)num1)+print_op(s)+to_string((int)num2);
+                      }else{
+                        res1.val=calculate(s,num2,num1);
+                        res1.str=to_string((int)num2)+print_op(s)+to_string((int)num1);
+                      }
+                      for(b=0;b<2;b++){
+                        if(b==0){
+                          res2.val=calculate(t,num3,num4);
+                          res2.str=to_string((int)num3)+print_op(t)+to_string((int)num4);
+                        }else{
+                          res2.val=calculate(t,num4,num3);
+                          res2.str=to_string((int)num4)+print_op(t)+to_string((int)num3);
+                        }
+                        for(c=0;c<2;c++){
+                          if(c==0){
+                            res3.val=calculate(u,res1.val,res2.val);
+                            res3.str=res1.str+print_op(u)+res2.str;
+                          }else{
+                            res3.val=calculate(u,res2.val,res1.val);
+                            res3.str=res2.str+print_op(u)+res1.str;
+                          }
+                          if(res3.val-10==0){
+                            cout<<res3.str<<"="<<res3.val<<endl;
+                            return;
+                          }
+                        }
+                      }
+                    }
+                  }else{
+                    break;
+                  }
+                  break;
+                default:
+                  for(a=0;a<2;a++){
+                    if(s<2){
+                      res1.form=poly;
+                    }
+                    if(a==0){
+                      res1.val=calculate(s,num1,num2);
+                      res1.str=to_string((int)num1)+print_op(s)+to_string((int)num2);
+                    }else{
+                      res1.val=calculate(s,num2,num1);
+                      res1.str=to_string((int)num2)+print_op(s)+to_string((int)num1);
+                    }
+                    for(b=0;b<2;b++){
+                      if(t<2){
+                        res2.form=poly;
+                      }else if(res1.form==poly){
+                        res1.str="("+res1.str+")";
+                        res1.form=mono;
+                      }
+                      if(b==0){
+                        res2.val=calculate(t,res1.val,num3);
+                        res2.str=res1.str+print_op(t)+to_string((int)num3);
+                      }else{
+                        if((t==3&&s>1)||(t==1&&s<2)){
+                          break;
+                        }else{
+                          res2.val=calculate(t,num3,res1.val);
+                          res2.str=to_string((int)num3)+print_op(t)+res1.str;
+                        }
+                      }
+                      for(c=0;c<2;c++){
+                        if(u>1&&res2.form==poly){
+                          res2.str="("+res2.str+")";
+                          res2.form=mono;
+                        }
+                        if(c==0){
+                          res3.val=calculate(u,res2.val,num4);
+                          res3.str=res2.str+print_op(u)+to_string((int)num4);
+                        }else{
+                          if((u==3&&t>1)||(u==1&&t<2)){
+                            break;
+                          }else{
+                            res3.val=calculate(u,num4,res2.val);
+                            res3.str=to_string((int)num4)+print_op(u)+res2.str;
+                          }
+                        }
+                        if(res3.val-10==0){
                 /*if(a==0){
                   cout<<num1<<print_op(s)<<num2<<"="<<res1.val<<", ";
                 }
@@ -145,8 +222,10 @@ void ans(double w,double x,double y,double z){
                 else{
                   cout<<num4<<print_op(u)<<res2.val<<"="<<res3.val<<endl;
                 }*/
-                      cout<<res3.str<<"="<<res3.val<<endl;
-                      return;
+                          cout<<res3.str<<"="<<res3.val<<endl;
+                          return;
+                        }
+                      }
                     }
                   }
                 }
