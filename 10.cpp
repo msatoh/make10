@@ -64,7 +64,7 @@ list<double> pick(list<double> lst,int i){
 void ans(double w,double x,double y,double z){
   int i,j,k,s,t,u,a,b,c,tournament;
   double num1,num2,num3,num4;
-  list<double> li={double(w),double(x),double(y),double(z)};
+  list<double> li={w,x,y,z};
   list<double> li1,li2;
   for(i=0;i<4;i++){
     num1=ref(li,i);
